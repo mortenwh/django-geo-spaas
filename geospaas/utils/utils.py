@@ -1,5 +1,6 @@
 ''' Utility functions to perform common operations '''
 import os
+import logging
 from netCDF4 import Dataset
 
 try:
@@ -16,12 +17,19 @@ except ImportError:
 
 from django.conf import settings
 
+def create_folder(folder):
+    try:
+        os.mkdir(folder)
+    except FileExistsError:
+        logging.debug(f"{folder} already exists.")
+
+
 def module_path(module, root):
     media_path = root
     for m in module.split('.'):
         media_path = os.path.join(media_path, m)
         if not os.path.exists(media_path):
-            os.mkdir(media_path)
+            create_folder(media_path)
     return media_path
 
 
@@ -32,13 +40,13 @@ def path(module, filename, root, date=None):
         for xx in [date.strftime('%Y'), date.strftime('%m'), date.strftime('%d')]:
             mp = os.path.join(mp, xx)
             if not os.path.exists(mp):
-                os.mkdir(mp)
+                create_folder(mp)
 
     # Get the path of media files created from <filename>
     basename = os.path.split(filename)[-1].split('.')[0]
     dataset_path = os.path.join(mp, basename)
     if not os.path.exists(dataset_path):
-        os.mkdir(dataset_path)
+        create_folder(dataset_path)
 
     return dataset_path
 
