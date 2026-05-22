@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class BaseViewerConfig(AppConfig):
-    name = 'geospaas.base_viewer'
+class CatalogConfig(AppConfig):
+    name = "geospaas.catalog"
     default_auto_field = "django.db.models.BigAutoField"
